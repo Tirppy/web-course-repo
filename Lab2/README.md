@@ -1,3 +1,46 @@
+# GreenSense - Smart Plant Care Landing Page
+
+A modern landing page for **GreenSense**, a plant shop specializing in smart plant pots with integrated sensors for monitoring plant health.
+
+## About the Project
+
+GreenSense offers innovative smart plant pots that help plant enthusiasts take better care of their green friends. The main product line features pots with built-in sensors that monitor:
+- 💧 Soil moisture levels
+- ☀️ Light exposure
+- 🌡️ Temperature
+- 📊 Growth analytics
+
+### Products Featured
+- **SmartPot Mini** - Perfect for succulents and herbs
+- **SmartPot Pro** - Full sensor suite with nutrient level tracking
+- **SmartPot XL** - For larger plants with automated watering
+
+## Live Demo
+
+🔗 [View Live Demo](#) <!-- Add your deployment link here -->
+
+## Screenshots
+
+<!-- Add screenshots of your landing page here -->
+
+## Tech Stack
+- HTML5
+- Vanilla CSS
+- No frameworks
+
+## Features
+- ✅ Responsive navigation with smooth scrolling
+- ✅ Hero section with call-to-action
+- ✅ Products showcase
+- ✅ Features grid
+- ✅ About section with statistics
+- ✅ Testimonials section
+- ✅ Contact form
+- ✅ Footer with links
+- ✅ Mobile-responsive design
+
+---
+
 # Lab 2 - Landing page
 
 Create a web page for your/friends/relatives business (example: car-rent, cookies-shop, crypto-scam)
