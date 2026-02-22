@@ -203,29 +203,6 @@ p {
   justify-content: center;
 }
 
-.mobile-sticky-cta {
-  display: none;
-}
-
-.mobile-tip {
-  display: none;
-  padding: 1.5rem 0;
-  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--accent-color) 100%);
-}
-
-.mobile-tip-content {
-  text-align: center;
-}
-
-.mobile-tip h2 {
-  font-size: 1.3rem;
-  margin-bottom: 0.5rem;
-}
-
-.mobile-tip p {
-  color: var(--text-dark);
-}
-
 /* ========================================
    Products Section
    ======================================== */
@@ -465,7 +442,9 @@ p {
 }
 
 .contact-content {
-  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
 }
 
 .contact-form {
@@ -592,120 +571,8 @@ p {
 }
 
 /* ========================================
-   PotPal Mascot
-   ======================================== */
-.mascot {
-  position: fixed;
-  right: 16px;
-  bottom: 16px;
-  width: 156px;
-  height: 156px;
-  border: none;
-  background: transparent;
-  padding: 0;
-  cursor: pointer;
-  z-index: 1100;
-  animation: mascotBounce 2.4s ease-in-out infinite, mascotTilt 4s ease-in-out infinite;
-}
-
-.mascot img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.2));
-}
-
-.mascot-hidden {
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(24px) scale(0.9);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.mascot:not(.mascot-hidden) {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0) scale(1);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.mascot-message {
-  position: absolute;
-  right: 100%;
-  bottom: 36px;
-  width: 250px;
-  margin-right: 12px;
-  background-color: var(--bg-white);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-sm);
-  box-shadow: var(--shadow-md);
-  color: var(--text-dark);
-  font-size: 0.9rem;
-  line-height: 1.3;
-  text-align: left;
-  padding: 0.75rem;
-  opacity: 0;
-  transform: translateX(8px);
-  transition: var(--transition);
-}
-
-.mascot:hover .mascot-message,
-.mascot:focus-visible .mascot-message {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-@keyframes mascotBounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes mascotTilt {
-  0%,
-  100% {
-    rotate: -4deg;
-  }
-
-  50% {
-    rotate: 4deg;
-  }
-}
-
-/* ========================================
    Responsive Design
    ======================================== */
-@media (max-width: 992px) {
-  h1 {
-    font-size: 2.5rem;
-  }
-
-  .hero h1 {
-    font-size: 2.9rem;
-  }
-
-  .section-subtitle {
-    margin-bottom: 2rem;
-  }
-
-  .products,
-  .features,
-  .about,
-  .testimonials,
-  .contact {
-    padding: 4.5rem 0;
-  }
-
-  .about-content {
-    gap: 2.5rem;
-  }
-}
-
 @media (max-width: 768px) {
   h1 {
     font-size: 2.25rem;
@@ -718,58 +585,10 @@ p {
   .nav-links {
     display: none;
   }
-
-  .mobile-sticky-cta {
-    display: block;
-    position: fixed;
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
-    z-index: 1050;
-    padding: 0.9rem 1rem;
-    background-color: var(--primary-color);
-    color: var(--text-white);
-    text-align: center;
-    text-decoration: none;
-    font-weight: 700;
-    border-radius: 999px;
-    box-shadow: var(--shadow-lg);
-  }
-
-  .mobile-tip {
-    display: block;
-  }
   
   .hero-cta {
     flex-direction: column;
     align-items: center;
-  }
-
-  .hero {
-    min-height: 90vh;
-  }
-
-  body {
-    padding-bottom: 86px;
-  }
-
-  .btn {
-    width: 100%;
-    max-width: 300px;
-  }
-
-  .product-grid,
-  .features-grid,
-  .testimonials-grid {
-    gap: 1.25rem;
-  }
-
-  .product-card,
-  .feature-card,
-  .testimonial-card,
-  .contact-form,
-  .info-card {
-    padding: 1.25rem;
   }
   
   .about-content {
@@ -803,35 +622,5 @@ p {
     width: 200px;
     height: 200px;
     font-size: 5rem;
-  }
-
-  .mascot {
-    width: 124px;
-    height: 124px;
-    right: 10px;
-    bottom: 92px;
-  }
-
-  .mascot-message {
-    width: 210px;
-    bottom: 30px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero h1 {
-    font-size: 2rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1rem;
-  }
-
-  .container {
-    padding: 0 14px;
-  }
-
-  .stat-number {
-    font-size: 2rem;
   }
 }
