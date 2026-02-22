@@ -598,8 +598,8 @@ p {
   position: fixed;
   right: 16px;
   bottom: 16px;
-  width: 128px;
-  height: 128px;
+  width: 156px;
+  height: 156px;
   border: none;
   background: transparent;
   padding: 0;
@@ -806,8 +806,8 @@ p {
   }
 
   .mascot {
-    width: 104px;
-    height: 104px;
+    width: 124px;
+    height: 124px;
     right: 10px;
     bottom: 92px;
   }
