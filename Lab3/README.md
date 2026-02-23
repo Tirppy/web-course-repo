@@ -1,5 +1,9 @@
 # GreenSense - Smart Plant Care Landing Page
 
+## Lab 3 Initialization
+
+This `Lab3` folder was initialized from the `Lab2` baseline and then extended for responsive design, mascot behavior, and CSS framework migration.
+
 A modern landing page for **GreenSense**, a plant shop specializing in smart plant pots with integrated sensors for monitoring plant health.
 
 ## About the Project
