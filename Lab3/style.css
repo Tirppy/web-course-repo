@@ -150,8 +150,7 @@ p {
 }
 
 .nav-links {
-  display: flex;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .nav-links li a {
@@ -163,6 +162,10 @@ p {
 
 .nav-links li a:hover {
   color: var(--primary-color);
+}
+
+.nav-links .nav-link {
+  padding: 0.25rem 0.5rem;
 }
 
 /* ========================================
@@ -201,6 +204,43 @@ p {
   display: flex;
   gap: 1rem;
   justify-content: center;
+}
+
+.mobile-only-tip {
+  background: var(--bg-light);
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.mobile-only-tip h2 {
+  font-size: 1.2rem;
+  margin-bottom: 0.4rem;
+}
+
+.mobile-only-tip p {
+  margin-bottom: 0;
+}
+
+.mobile-cta-btn {
+  position: fixed;
+  left: 1rem;
+  right: 1rem;
+  bottom: 0.75rem;
+  z-index: 1100;
+  text-align: center;
+  text-decoration: none;
+  background: var(--primary-color);
+  color: var(--text-white);
+  font-weight: 700;
+  padding: 0.9rem 1rem;
+  border-radius: 999px;
+  box-shadow: var(--shadow-lg);
+}
+
+.mobile-cta-btn:hover {
+  background: var(--primary-dark);
+  color: var(--text-white);
 }
 
 /* ========================================
@@ -571,6 +611,80 @@ p {
 }
 
 /* ========================================
+   PotPal Mascot
+   ======================================== */
+.potpal-mascot {
+  position: fixed;
+  right: 1rem;
+  bottom: 5rem;
+  z-index: 1200;
+  opacity: 0;
+  transform: translateY(40px) scale(0.92);
+  animation: potpal-appear 0.7s ease-out 2.2s forwards;
+}
+
+.potpal-image {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  border-radius: 50%;
+  box-shadow: var(--shadow-md);
+  background: var(--bg-white);
+  animation: potpal-bounce 2.3s ease-in-out infinite;
+}
+
+.potpal-message {
+  position: absolute;
+  right: 108px;
+  bottom: 20px;
+  width: 220px;
+  background: var(--bg-white);
+  color: var(--text-dark);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  box-shadow: var(--shadow-md);
+  padding: 0.65rem 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(8px);
+  transition: var(--transition);
+}
+
+.potpal-mascot:hover .potpal-message {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@keyframes potpal-appear {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes potpal-bounce {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-8px) rotate(-6deg);
+  }
+  50% {
+    transform: translateY(0) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-6px) rotate(5deg);
+  }
+}
+
+/* ========================================
    Responsive Design
    ======================================== */
 @media (max-width: 768px) {
@@ -583,12 +697,39 @@ p {
   }
   
   .nav-links {
-    display: none;
+    gap: 0;
+  }
+
+  .navbar {
+    padding: 0.65rem 0;
+  }
+
+  .navbar .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .navbar-collapse {
+    margin-top: 0.7rem;
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    padding: 0.5rem;
+  }
+
+  .hero {
+    min-height: 92vh;
   }
   
   .hero-cta {
     flex-direction: column;
     align-items: center;
+    width: 100%;
+  }
+
+  .hero-cta .btn {
+    width: 100%;
+    max-width: 320px;
   }
   
   .about-content {
@@ -622,5 +763,21 @@ p {
     width: 200px;
     height: 200px;
     font-size: 5rem;
+  }
+
+  .potpal-mascot {
+    right: 0.65rem;
+    bottom: 5.3rem;
+  }
+
+  .potpal-image {
+    width: 84px;
+    height: 84px;
+  }
+
+  .potpal-message {
+    width: 180px;
+    right: 88px;
+    font-size: 0.8rem;
   }
 }
