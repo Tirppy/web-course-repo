@@ -21,7 +21,7 @@ GreenSense offers innovative smart plant pots that help plant enthusiasts take b
 
 ## Live Demo
 
-🔗 [View Live Demo](https://tirppy.github.io/web-course-repo/Lab2/)
+🔗 [View Live Demo](https://tirppy.github.io/web-course-repo/Lab3/)
 
 ## Screenshots
 
@@ -37,22 +37,23 @@ GreenSense offers innovative smart plant pots that help plant enthusiasts take b
 ## Tech Stack
 - HTML5
 - Vanilla CSS
-- No frameworks
+- Bootstrap 5 (partial migration)
 
 ## Features
-- ✅ Responsive navigation with smooth scrolling
+- ✅ Responsive navigation with Bootstrap collapse on mobile
+- ✅ Mobile CTA button always visible on small screens
+- ✅ Mobile-only section with quick plant-care tip
+- ✅ Delayed mascot appearance on page corner (PotPal)
+- ✅ Mascot idle animation (bounce + tilt)
+- ✅ Mascot hover message with CTA link
 - ✅ Hero section with call-to-action
 - ✅ Products showcase
-- ✅ Features grid
-- ✅ About section with statistics
-- ✅ Testimonials section
-- ✅ Contact form
+- ✅ Features, About, Testimonials and Contact sections
 - ✅ Footer with links
-- ✅ Mobile-responsive design
 
 ---
 
-# Lab 2 - Landing page
+# Lab 3 - Responsive design and mascot
 
 Create a web page for your/friends/relatives business (example: car-rent, cookies-shop, crypto-scam)
 
@@ -65,12 +66,18 @@ Create a web page for your/friends/relatives business (example: car-rent, cookie
 - At least 4 sections ([see examples](https://webflow.com/blog/high-converting-landing-page))
 - Pleasant to the eyes
 
-## Dev requirements
+## Lab 3 requirements coverage
 
-- Use vanilla CSS and HTML (no frameworks)
-- Have a decent git history (no one commit)
-- The page should be deployed on a free hosting service (example: GitHub Pages, Vercel, Netlify)
-- Project repo should have a README with a short description of the landing page topic, screenshots, and a link to the live demo
+- ✅ Responsive desktop/mobile sizing
+- ✅ Mobile-visible CTA
+- ✅ Mobile-only element
+- ✅ Friendly topic-related mascot
+- ✅ Delayed mascot appearance near page border
+- ✅ Animated mascot
+- ✅ Hover message with welcome/CTA
+- ✅ Decent git history with multiple small commits
+- ✅ Partial migration to a CSS framework (Bootstrap)
+- 🔄 Live deployment link included above
 
 ## Other requirements:
 
