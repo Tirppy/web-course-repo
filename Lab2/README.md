@@ -17,11 +17,18 @@ GreenSense offers innovative smart plant pots that help plant enthusiasts take b
 
 ## Live Demo
 
-🔗 [View Live Demo](#) <!-- Add your deployment link here -->
+🔗 [View Live Demo](https://tirppy.github.io/web-course-repo/Lab2/)
 
 ## Screenshots
 
-<!-- Add screenshots of your landing page here -->
+<img width="2528" height="1213" alt="image" src="https://github.com/user-attachments/assets/47472f74-d5df-489a-b895-801262e2a472" />
+<img width="2531" height="942" alt="image" src="https://github.com/user-attachments/assets/7ac5f903-a4d2-4809-b895-7ecd08135e4d" />
+<img width="2530" height="1071" alt="image" src="https://github.com/user-attachments/assets/76c0e210-ca27-4f21-8106-c14f03af2f12" />
+<img width="2530" height="759" alt="image" src="https://github.com/user-attachments/assets/1cd295c7-3859-40ec-baf4-5ff79021022e" />
+<img width="2528" height="700" alt="image" src="https://github.com/user-attachments/assets/b2b5611c-0eb9-44a3-a9b1-b052204b2aac" />
+<img width="2521" height="1121" alt="image" src="https://github.com/user-attachments/assets/b0dab2c5-a631-431c-886b-8723e7d054dd" />
+<img width="2529" height="455" alt="image" src="https://github.com/user-attachments/assets/e3877049-dc88-412f-82ce-e0b9389f8e15" />
+
 
 ## Tech Stack
 - HTML5
