@@ -196,7 +196,7 @@
     ]
   },
   "mascot": {
-    "image": "/img/PotPal.png",
+    "image": "img/PotPal.png",
     "alt": "PotPal mascot",
     "message": "Hi! I am PotPal 🌿 Welcome to GreenSense.",
     "ctaLabel": "See SmartPots",
