@@ -624,19 +624,17 @@ p {
 }
 
 .potpal-image {
-  width: 100px;
-  height: 100px;
+  width: 300px;
+  height: 300px;
   object-fit: contain;
-  border-radius: 50%;
-  box-shadow: var(--shadow-md);
-  background: var(--bg-white);
+  background: transparent;
   animation: potpal-bounce 2.3s ease-in-out infinite;
 }
 
 .potpal-message {
   position: absolute;
-  right: 108px;
-  bottom: 20px;
+  left: -150px;
+  top: 60px;
   width: 220px;
   background: var(--bg-white);
   color: var(--text-dark);
@@ -805,8 +803,8 @@ p {
   }
 
   .potpal-image {
-    width: 84px;
-    height: 84px;
+    width: 168px;
+    height: 168px;
   }
 
   .potpal-message {
