@@ -1,0 +1,205 @@
+{
+  "meta": {
+    "pageTitle": "GreenSense | Smart Plant Care",
+    "brand": "🌿 GreenSense",
+    "copyright": "© 2026 GreenSense. All rights reserved."
+  },
+  "navigation": [
+    { "label": "Products", "href": "#products" },
+    { "label": "Features", "href": "#features" },
+    { "label": "About", "href": "#about" },
+    { "label": "Testimonials", "href": "#testimonials" },
+    { "label": "Contact", "href": "#contact" }
+  ],
+  "hero": {
+    "title": "Your Plants Deserve Smart Care",
+    "highlight": "Smart Care",
+    "subtitle": "Introducing intelligent plant pots with built-in sensors that monitor soil moisture, light levels, and temperature — so your plants thrive effortlessly.",
+    "primaryButton": { "label": "Shop Now", "href": "#products" },
+    "secondaryButton": { "label": "Learn More", "href": "#features" }
+  },
+  "mobileTip": {
+    "title": "Plant tip for mobile users 🌱",
+    "text": "Keep your SmartPot near natural light and check hydration alerts daily.",
+    "ctaLabel": "Open Product Catalog",
+    "ctaHref": "#products"
+  },
+  "products": {
+    "title": "Our Smart Products",
+    "subtitle": "Premium plant care solutions powered by technology",
+    "items": [
+      {
+        "icon": "🌱",
+        "name": "SmartPot Mini",
+        "description": "Perfect for small succulents and herbs. Monitors moisture and sends alerts to your phone.",
+        "price": "$49.99",
+        "buttonLabel": "Order Now",
+        "buttonHref": "#contact",
+        "featured": false,
+        "badge": ""
+      },
+      {
+        "icon": "🪴",
+        "name": "SmartPot Pro",
+        "description": "Full sensor suite including soil moisture, light, temperature, and nutrient levels.",
+        "price": "$89.99",
+        "buttonLabel": "Order Now",
+        "buttonHref": "#contact",
+        "featured": true,
+        "badge": "Best Seller"
+      },
+      {
+        "icon": "🌳",
+        "name": "SmartPot XL",
+        "description": "For larger plants and trees. Includes automated watering system and advanced analytics.",
+        "price": "$149.99",
+        "buttonLabel": "Order Now",
+        "buttonHref": "#contact",
+        "featured": false,
+        "badge": ""
+      }
+    ]
+  },
+  "features": {
+    "title": "Why Choose GreenSense?",
+    "subtitle": "Technology that makes plant care effortless",
+    "items": [
+      {
+        "icon": "💧",
+        "title": "Moisture Monitoring",
+        "text": "Real-time soil moisture tracking with instant notifications when your plant needs water."
+      },
+      {
+        "icon": "☀️",
+        "title": "Light Tracking",
+        "text": "Know exactly how much sunlight your plants receive and get placement recommendations."
+      },
+      {
+        "icon": "🌡️",
+        "title": "Temperature Alerts",
+        "text": "Protect your plants from extreme temperatures with proactive climate warnings."
+      },
+      {
+        "icon": "📱",
+        "title": "Mobile App",
+        "text": "Monitor all your plants from anywhere with our intuitive iOS and Android app."
+      },
+      {
+        "icon": "📊",
+        "title": "Growth Analytics",
+        "text": "Track your plant's health history and get personalized care recommendations."
+      },
+      {
+        "icon": "🔋",
+        "title": "Long Battery Life",
+        "text": "Up to 12 months on a single charge with eco-friendly rechargeable batteries."
+      }
+    ]
+  },
+  "about": {
+    "title": "Our Story",
+    "paragraphs": [
+      "GreenSense was born from a simple frustration: watching beautiful plants wither despite our best intentions. Founded in 2023 by a team of plant lovers and tech enthusiasts, we set out to bridge the gap between nature and technology.",
+      "Our mission is to make plant parenting accessible to everyone. Whether you're a seasoned gardener or someone who's killed every plant they've owned, our smart pots give you the insights you need to help your green friends flourish."
+    ],
+    "imageEmoji": "🌿",
+    "stats": [
+      { "number": "50K+", "label": "Happy Plants" },
+      { "number": "15K+", "label": "Customers" },
+      { "number": "98%", "label": "Satisfaction" }
+    ]
+  },
+  "testimonials": {
+    "title": "What Our Customers Say",
+    "subtitle": "Join thousands of happy plant parents",
+    "items": [
+      {
+        "quote": "I used to kill every plant I bought. Now my apartment is a jungle! The moisture alerts have been a game-changer.",
+        "avatar": "👩",
+        "name": "Sarah M.",
+        "role": "First-time Plant Parent"
+      },
+      {
+        "quote": "As a professional gardener, I was skeptical. But the analytics have helped me understand my plants on a whole new level.",
+        "avatar": "👨",
+        "name": "Marcus T.",
+        "role": "Professional Gardener"
+      },
+      {
+        "quote": "I travel a lot for work and always worried about my plants. Now I can monitor them from anywhere. Absolute peace of mind!",
+        "avatar": "👩‍💼",
+        "name": "Jennifer L.",
+        "role": "Business Traveler"
+      }
+    ]
+  },
+  "contact": {
+    "title": "Get In Touch",
+    "subtitle": "Have questions? We'd love to hear from you!",
+    "subjectOptions": [
+      { "value": "general", "label": "General Inquiry" },
+      { "value": "order", "label": "Order Question" },
+      { "value": "support", "label": "Technical Support" },
+      { "value": "wholesale", "label": "Wholesale/Partnership" }
+    ],
+    "infoCards": [
+      {
+        "icon": "📍",
+        "title": "Visit Us",
+        "line1": "123 Green Street",
+        "line2": "Portland, OR 97201"
+      },
+      {
+        "icon": "📧",
+        "title": "Email Us",
+        "line1": "hello@greensense.com",
+        "line2": "support@greensense.com"
+      },
+      {
+        "icon": "📞",
+        "title": "Call Us",
+        "line1": "(503) 555-0123",
+        "line2": "Mon-Fri 9am-5pm PST"
+      }
+    ]
+  },
+  "footer": {
+    "description": "Making plant care smarter, one pot at a time.",
+    "columns": [
+      {
+        "title": "Products",
+        "links": [
+          { "label": "SmartPot Mini", "href": "#products" },
+          { "label": "SmartPot Pro", "href": "#products" },
+          { "label": "SmartPot XL", "href": "#products" },
+          { "label": "Accessories", "href": "#products" }
+        ]
+      },
+      {
+        "title": "Company",
+        "links": [
+          { "label": "About Us", "href": "#about" },
+          { "label": "Reviews", "href": "#testimonials" },
+          { "label": "Careers", "href": "#" },
+          { "label": "Press", "href": "#" }
+        ]
+      },
+      {
+        "title": "Support",
+        "links": [
+          { "label": "Contact", "href": "#contact" },
+          { "label": "FAQ", "href": "#" },
+          { "label": "Shipping", "href": "#" },
+          { "label": "Returns", "href": "#" }
+        ]
+      }
+    ]
+  },
+  "mascot": {
+    "image": "/img/PotPal.png",
+    "alt": "PotPal mascot",
+    "message": "Hi! I am PotPal 🌿 Welcome to GreenSense.",
+    "ctaLabel": "See SmartPots",
+    "ctaHref": "#products"
+  }
+}
