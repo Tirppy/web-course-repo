@@ -1,85 +1,59 @@
-# GreenSense - Smart Plant Care Landing Page
+# GreenSense — Lab 4 (SSG + Git CMS)
 
-## Lab 3 Initialization
+Lab 4 migrates the GreenSense landing page to a static site generator and makes most of its content editable through a Git-based CMS.
 
-This `Lab3` folder was initialized from the `Lab2` baseline and then extended for responsive design, mascot behavior, and CSS framework migration.
+## Stack
 
-A modern landing page for **GreenSense**, a plant shop specializing in smart plant pots with integrated sensors for monitoring plant health.
+- **SSG:** Eleventy (11ty)
+- **CMS:** Decap CMS (Git-based)
+- **Styling:** Existing `Lab3` CSS (`reset.css`, `style.css`) + Bootstrap CDN
 
-## About the Project
+## Project structure
 
-GreenSense offers innovative smart plant pots that help plant enthusiasts take better care of their green friends. The main product line features pots with built-in sensors that monitor:
-- 💧 Soil moisture levels
-- ☀️ Light exposure
-- 🌡️ Temperature
-- 📊 Growth analytics
+- `src/index.njk` — page template
+- `src/content/site.json` — main editable content model
+- `src/admin/` — Decap CMS admin app and config
+- `src/assets/` — copied style/image assets from Lab 3
+- `dist/` — generated output
 
-### Products Featured
-- **SmartPot Mini** - Perfect for succulents and herbs
-- **SmartPot Pro** - Full sensor suite with nutrient level tracking
-- **SmartPot XL** - For larger plants with automated watering
+## Run locally
 
-## Live Demo
+```bash
+cd Lab4
+npm install
+npm run dev
+```
 
-🔗 [View Live Demo](https://tirppy.github.io/web-course-repo/Lab3/)
+Build only:
 
-## Screenshots
+```bash
+cd Lab4
+npm run build
+```
 
-<img width="2528" height="1213" alt="image" src="https://github.com/user-attachments/assets/47472f74-d5df-489a-b895-801262e2a472" />
-<img width="2531" height="942" alt="image" src="https://github.com/user-attachments/assets/7ac5f903-a4d2-4809-b895-7ecd08135e4d" />
-<img width="2530" height="1071" alt="image" src="https://github.com/user-attachments/assets/76c0e210-ca27-4f21-8106-c14f03af2f12" />
-<img width="2530" height="759" alt="image" src="https://github.com/user-attachments/assets/1cd295c7-3859-40ec-baf4-5ff79021022e" />
-<img width="2528" height="700" alt="image" src="https://github.com/user-attachments/assets/b2b5611c-0eb9-44a3-a9b1-b052204b2aac" />
-<img width="2521" height="1121" alt="image" src="https://github.com/user-attachments/assets/b0dab2c5-a631-431c-886b-8723e7d054dd" />
-<img width="2529" height="455" alt="image" src="https://github.com/user-attachments/assets/e3877049-dc88-412f-82ce-e0b9389f8e15" />
+## CMS editing
 
+1. Start local server with `npm run dev`
+2. Open `/admin/`
+3. Edit entries under **Site Content**
+4. Save/publish changes (commit to repo through CMS)
 
-## Tech Stack
-- HTML5
-- Vanilla CSS
-- Bootstrap 5 (partial migration)
+Most text content is editable from `site.json` through the CMS, including:
+- navigation
+- hero section
+- products
+- features
+- about block and stats
+- testimonials
+- contact info cards and subjects
+- footer links
+- mascot message
 
-## Features
-- ✅ Responsive navigation with Bootstrap collapse on mobile
-- ✅ Mobile CTA button always visible on small screens
-- ✅ Mobile-only section with quick plant-care tip
-- ✅ Delayed mascot appearance on page corner (PotPal)
-- ✅ Mascot idle animation (bounce + tilt)
-- ✅ Mascot hover message with CTA link
-- ✅ Hero section with call-to-action
-- ✅ Products showcase
-- ✅ Features, About, Testimonials and Contact sections
-- ✅ Footer with links
+## Deployment
 
----
+GitHub Actions workflow: `.github/workflows/lab4-pages.yml`
 
-# Lab 3 - Responsive design and mascot
+- Builds the Eleventy project from `Lab4/`
+- Publishes `Lab4/dist` to GitHub Pages
 
-Create a web page for your/friends/relatives business (example: car-rent, cookies-shop, crypto-scam)
-
-> For a maximal grade, the website should be for a real client (your/friends/relatives business), otherwise -1-2 points
-
-## Customer requirements
-
-- Some form of navigation to sections (links, buttons)
-- Call to action
-- At least 4 sections ([see examples](https://webflow.com/blog/high-converting-landing-page))
-- Pleasant to the eyes
-
-## Lab 3 requirements coverage
-
-- ✅ Responsive desktop/mobile sizing
-- ✅ Mobile-visible CTA
-- ✅ Mobile-only element
-- ✅ Friendly topic-related mascot
-- ✅ Delayed mascot appearance near page border
-- ✅ Animated mascot
-- ✅ Hover message with welcome/CTA
-- ✅ Decent git history with multiple small commits
-- ✅ Partial migration to a CSS framework (Bootstrap)
-- 🔄 Live deployment link included above
-
-## Other requirements:
-
-- For potential maximal mark, a WIP version should be submitted during the class
-- Use index.html, reset.css
+After enabling GitHub Pages for the repository (source: GitHub Actions), the live URL is available in the workflow deployment output.
