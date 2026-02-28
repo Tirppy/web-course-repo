@@ -1,7 +1,7 @@
 backend:
   name: github
   repo: tirppy/web-course-repo
-  branch: lab4-implementation
+  branch: master
 
 media_folder: "src/assets/img/uploads"
 public_folder: "/img/uploads"
