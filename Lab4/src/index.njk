@@ -1,0 +1,216 @@
+---
+layout: layouts/base.njk
+permalink: /index.html
+---
+
+<nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+  <div class="container nav-container">
+    <a href="#" class="logo navbar-brand">{{ site.meta.brand }}</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#mainNav"
+      aria-controls="mainNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto nav-links mb-2 mb-lg-0">
+        {% for item in site.navigation %}
+        <li class="nav-item"><a class="nav-link" href="{{ item.href }}">{{ item.label }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="container hero-content">
+    <h1>{{ site.hero.title | replace(site.hero.highlight, '<span class="highlight">' + site.hero.highlight + '</span>') | safe }}</h1>
+    <p class="hero-subtitle">{{ site.hero.subtitle }}</p>
+    <div class="hero-cta">
+      <a href="{{ site.hero.primaryButton.href }}" class="btn btn-primary">{{ site.hero.primaryButton.label }}</a>
+      <a href="{{ site.hero.secondaryButton.href }}" class="btn btn-secondary">{{ site.hero.secondaryButton.label }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="mobile-only-tip d-md-none" aria-label="Mobile quick tip">
+  <div class="container">
+    <h2>{{ site.mobileTip.title }}</h2>
+    <p>{{ site.mobileTip.text }}</p>
+  </div>
+</section>
+
+<a href="{{ site.mobileTip.ctaHref }}" class="mobile-cta-btn d-md-none">{{ site.mobileTip.ctaLabel }}</a>
+
+<section class="products" id="products">
+  <div class="container">
+    <h2 class="section-title">{{ site.products.title }}</h2>
+    <p class="section-subtitle">{{ site.products.subtitle }}</p>
+
+    <div class="product-grid">
+      {% for product in site.products.items %}
+      <div class="product-card{% if product.featured %} featured{% endif %}">
+        {% if product.featured and product.badge %}
+        <div class="product-badge">{{ product.badge }}</div>
+        {% endif %}
+        <div class="product-icon">{{ product.icon }}</div>
+        <h3>{{ product.name }}</h3>
+        <p class="product-description">{{ product.description }}</p>
+        <p class="product-price">{{ product.price }}</p>
+        <a href="{{ product.buttonHref }}" class="btn btn-primary">{{ product.buttonLabel }}</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="container">
+    <h2 class="section-title">{{ site.features.title }}</h2>
+    <p class="section-subtitle">{{ site.features.subtitle }}</p>
+
+    <div class="features-grid">
+      {% for feature in site.features.items %}
+      <div class="feature-card">
+        <div class="feature-icon">{{ feature.icon }}</div>
+        <h3>{{ feature.title }}</h3>
+        <p>{{ feature.text }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="container about-content">
+    <div class="about-text">
+      <h2 class="section-title">{{ site.about.title }}</h2>
+      {% for paragraph in site.about.paragraphs %}
+      <p>{{ paragraph }}</p>
+      {% endfor %}
+      <div class="about-stats">
+        {% for stat in site.about.stats %}
+        <div class="stat">
+          <span class="stat-number">{{ stat.number }}</span>
+          <span class="stat-label">{{ stat.label }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="about-image">
+      <div class="image-placeholder">{{ site.about.imageEmoji }}</div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <h2 class="section-title">{{ site.testimonials.title }}</h2>
+    <p class="section-subtitle">{{ site.testimonials.subtitle }}</p>
+
+    <div class="testimonials-grid">
+      {% for testimonial in site.testimonials.items %}
+      <div class="testimonial-card">
+        <div class="testimonial-content">
+          <p>"{{ testimonial.quote }}"</p>
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">{{ testimonial.avatar }}</div>
+          <div class="author-info">
+            <span class="author-name">{{ testimonial.name }}</span>
+            <span class="author-title">{{ testimonial.role }}</span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="container">
+    <h2 class="section-title">{{ site.contact.title }}</h2>
+    <p class="section-subtitle">{{ site.contact.subtitle }}</p>
+
+    <div class="contact-content">
+      <form class="contact-form">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Your name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="your@email.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <select id="subject" name="subject">
+            {% for option in site.contact.subjectOptions %}
+            <option value="{{ option.value }}">{{ option.label }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" placeholder="How can we help?" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full">Send Message</button>
+      </form>
+
+      <div class="contact-info">
+        {% for card in site.contact.infoCards %}
+        <div class="info-card">
+          <div class="info-icon">{{ card.icon }}</div>
+          <h4>{{ card.title }}</h4>
+          <p>{{ card.line1 }}<br>{{ card.line2 }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-content">
+    <div class="footer-brand">
+      <a href="#" class="logo">{{ site.meta.brand }}</a>
+      <p>{{ site.footer.description }}</p>
+    </div>
+
+    <div class="footer-links">
+      {% for column in site.footer.columns %}
+      <div class="footer-column">
+        <h4>{{ column.title }}</h4>
+        <ul>
+          {% for link in column.links %}
+          <li><a href="{{ link.href }}">{{ link.label }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container">
+      <p>{{ site.meta.copyright }}</p>
+    </div>
+  </div>
+</footer>
+
+<div class="potpal-mascot" aria-label="PotPal mascot assistant">
+  <img src="{{ site.mascot.image }}" alt="{{ site.mascot.alt }}" class="potpal-image" />
+  <div class="potpal-message">
+    {{ site.mascot.message }}
+    <a href="{{ site.mascot.ctaHref }}">{{ site.mascot.ctaLabel }}</a>
+  </div>
+</div>
