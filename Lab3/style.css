@@ -664,7 +664,6 @@ p {
 
 .potpal-mascot:hover .potpal-message {
   opacity: 1;
-  pointer-events: auto;
   transform: translateX(0);
 }
 
