@@ -30,6 +30,19 @@ Socket-based CLI browser/search tool for the Web course lab.
 - `Lab5/go2web.bat` - Windows launcher
 - `Lab5/test_go2web.py` - small smoke/unit tests
 
+## Submission checklist
+
+- keep the branch history with multiple meaningful commits instead of only 1-2
+- keep the demo GIF in the README
+- be ready to show `-h`, `-u`, `-s`, and `--open`
+- mention redirects, cache, and content negotiation during the presentation
+
+## Troubleshooting
+
+- if a page looks messy, retry with another URL because some sites render poorly without JavaScript
+- if you see `[cached]`, the response was reused from `Lab5/.cache/`
+- if you want a fresh fetch during demos, delete the matching files from `Lab5/.cache/`
+
 ## Run
 
 Windows PowerShell:
