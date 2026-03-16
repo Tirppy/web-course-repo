@@ -222,6 +222,13 @@ def cache_path_for(url: str) -> Path:
     return CACHE_DIR / f"{digest}.json"
 
 
+def remove_cache_file(path: Path) -> None:
+    try:
+        path.unlink()
+    except OSError:
+        pass
+
+
 def load_cache(url: str) -> HttpResponse | None:
     path = cache_path_for(url)
     if not path.exists():
@@ -229,8 +236,10 @@ def load_cache(url: str) -> HttpResponse | None:
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
+        remove_cache_file(path)
         return None
     if payload.get("expires_at", 0) < time.time():
+        remove_cache_file(path)
         return None
     return HttpResponse(
         status_code=payload["status_code"],
@@ -245,7 +254,7 @@ def load_cache(url: str) -> HttpResponse | None:
 def save_cache(response: HttpResponse) -> None:
     if response.status_code != 200:
         return
-    CACHE_DIR.mkdir(exist_ok=True)
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
     path = cache_path_for(response.url)
     payload = {
         "status_code": response.status_code,
