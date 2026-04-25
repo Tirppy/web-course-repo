@@ -1,6 +1,6 @@
 import { formatDisplayDate } from '../utils/plants'
 
-function CareBoards({ agendaPlants, recentActivity }) {
+function CareBoards({ agendaPlants, recentActivity, weeklyForecast }) {
   return (
     <div className="care-grid">
       <section className="panel">
@@ -29,6 +29,31 @@ function CareBoards({ agendaPlants, recentActivity }) {
           ) : (
             <p className="empty-inline">Everything is comfortably on track for now.</p>
           )}
+        </div>
+      </section>
+
+      <section className="panel">
+        <div className="panel-heading compact">
+          <div>
+            <p className="eyebrow">7-day forecast</p>
+            <h2>Scan how busy the next week looks before you start batching care.</h2>
+          </div>
+        </div>
+
+        <div className="forecast-list">
+          {weeklyForecast.map((day) => (
+            <article
+              key={day.date}
+              className={`forecast-item ${day.count ? 'is-busy' : ''}`}
+              title={day.plantNames.length ? day.plantNames.join(', ') : 'No scheduled watering'}
+            >
+              <div>
+                <strong>{day.label}</strong>
+                <p>{formatDisplayDate(day.date)}</p>
+              </div>
+              <span className="forecast-count">{day.count}</span>
+            </article>
+          ))}
         </div>
       </section>
 

@@ -21,6 +21,8 @@ export const SORT_OPTIONS = [
   { value: 'room', label: 'Room A-Z' },
 ]
 
+const DEFAULT_WATERING_INTERVAL = 7
+
 const HEALTH_LABELS = {
   thriving: 'Thriving',
   steady: 'Steady',
@@ -39,6 +41,10 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
   day: 'numeric',
 })
 
+const weekdayFormatter = new Intl.DateTimeFormat('en-US', {
+  weekday: 'short',
+})
+
 export function getTodayIso() {
   const date = new Date()
   date.setHours(0, 0, 0, 0)
@@ -52,7 +58,7 @@ export function createEmptyDraft() {
     species: '',
     room: '',
     light: LIGHT_OPTIONS[0],
-    wateringInterval: '7',
+    wateringInterval: String(DEFAULT_WATERING_INTERVAL),
     lastWatered: getTodayIso(),
     health: HEALTH_OPTIONS[0].value,
     favorite: false,
@@ -180,6 +186,66 @@ export function buildActivity(plants) {
       })),
     )
     .sort((first, second) => parseIsoDate(second.date) - parseIsoDate(first.date))
+}
+
+export function buildRoomSummaries(plants, referenceDate = getTodayIso()) {
+  const summaries = plants.reduce((rooms, plant) => {
+    const roomName = plant.room || 'Unassigned'
+    const existingRoom = rooms.get(roomName) ?? {
+      room: roomName,
+      total: 0,
+      favorites: 0,
+      dueNow: 0,
+      thriving: 0,
+    }
+
+    const status = getWateringStatus(plant, referenceDate)
+
+    existingRoom.total += 1
+    existingRoom.favorites += plant.favorite ? 1 : 0
+    existingRoom.thriving += plant.health === 'thriving' ? 1 : 0
+    existingRoom.dueNow += status.key === 'overdue' || status.key === 'today' ? 1 : 0
+
+    rooms.set(roomName, existingRoom)
+
+    return rooms
+  }, new Map())
+
+  return Array.from(summaries.values()).sort((first, second) => {
+    if (first.dueNow !== second.dueNow) {
+      return second.dueNow - first.dueNow
+    }
+
+    if (first.total !== second.total) {
+      return second.total - first.total
+    }
+
+    return first.room.localeCompare(second.room)
+  })
+}
+
+export function buildWeeklyForecast(plants, referenceDate = getTodayIso()) {
+  return Array.from({ length: 7 }, (_, index) => {
+    const date = addDays(referenceDate, index)
+    const plantNames = plants
+      .filter((plant) => {
+        if (index === 0) {
+          const status = getWateringStatus(plant, referenceDate)
+          return status.key === 'overdue' || status.key === 'today'
+        }
+
+        return addDays(plant.lastWatered, plant.wateringInterval) === date
+      })
+      .map((plant) => plant.name)
+      .sort((first, second) => first.localeCompare(second))
+
+    return {
+      date,
+      label: index === 0 ? 'Today' : weekdayFormatter.format(parseIsoDate(date)),
+      count: plantNames.length,
+      plantNames,
+    }
+  })
 }
 
 export function countRecentLogs(plants, referenceDate = getTodayIso()) {

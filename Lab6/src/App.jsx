@@ -5,9 +5,12 @@ import FilterBar from './components/FilterBar'
 import Header from './components/Header'
 import PlantCard from './components/PlantCard'
 import PlantForm from './components/PlantForm'
+import RoomOverview from './components/RoomOverview'
 import { seedPlants } from './data/seedPlants'
 import {
   buildActivity,
+  buildRoomSummaries,
+  buildWeeklyForecast,
   countRecentLogs,
   createDraftFromPlant,
   createEmptyDraft,
@@ -87,6 +90,11 @@ function App() {
     [plants],
   )
 
+  const roomSummaries = useMemo(
+    () => buildRoomSummaries(plants, referenceDate),
+    [plants, referenceDate],
+  )
+
   const stats = useMemo(
     () => [
       {
@@ -163,6 +171,11 @@ function App() {
   )
 
   const recentActivity = useMemo(() => buildActivity(plants).slice(0, 6), [plants])
+
+  const weeklyForecast = useMemo(
+    () => buildWeeklyForecast(plants, referenceDate),
+    [plants, referenceDate],
+  )
 
   const handleDraftChange = (event) => {
     const { name, value, type, checked } = event.target
@@ -297,6 +310,8 @@ function App() {
         <div className="workspace-main stack">
           <Dashboard stats={stats} />
 
+          <RoomOverview rooms={roomSummaries} />
+
           <FilterBar
             filters={filters}
             roomOptions={roomOptions}
@@ -351,7 +366,11 @@ function App() {
             onRestoreSamples={handleRestoreSamples}
           />
 
-          <CareBoards agendaPlants={agendaPlants} recentActivity={recentActivity} />
+          <CareBoards
+            agendaPlants={agendaPlants}
+            recentActivity={recentActivity}
+            weeklyForecast={weeklyForecast}
+          />
         </aside>
       </main>
     </div>

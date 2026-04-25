@@ -330,6 +330,16 @@ textarea {
   gap: 1rem;
 }
 
+.room-grid,
+.forecast-list {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.room-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .stat-card,
 .plant-card {
   padding: 1.15rem;
@@ -338,9 +348,78 @@ textarea {
   background: rgba(255, 255, 255, 0.3);
 }
 
+.room-card,
+.forecast-item {
+  padding: 1rem 1.05rem;
+  border: 1px solid var(--border);
+  border-radius: 1.2rem;
+  background: rgba(255, 255, 255, 0.24);
+}
+
 .stat-card h3 {
   font-size: 2rem;
   margin-bottom: 0.45rem;
+}
+
+.room-card-header,
+.forecast-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+}
+
+.room-card-header strong,
+.forecast-item strong {
+  display: block;
+}
+
+.room-card-header span,
+.forecast-item p {
+  color: var(--muted);
+}
+
+.room-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0.9rem 0 0;
+}
+
+.room-meta div {
+  padding: 0.7rem 0.75rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.room-meta dt {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.room-meta dd {
+  margin: 0.35rem 0 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.forecast-item.is-busy {
+  border-color: rgba(77, 120, 85, 0.24);
+  background: rgba(77, 120, 85, 0.12);
+}
+
+.forecast-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  background: var(--panel-strong);
+  color: var(--accent-strong);
+  font-weight: 700;
 }
 
 .stat-card p:last-child,
@@ -664,10 +743,12 @@ textarea {
 
   .hero-highlights,
   .stats-grid,
+  .room-grid,
   .plant-grid-live,
   .plant-form,
   .filter-grid,
-  .plant-meta {
+  .plant-meta,
+  .room-meta {
     grid-template-columns: 1fr;
   }
 
