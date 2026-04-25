@@ -14,8 +14,8 @@ function Header({ theme, onToggle, totalPlants, actionCount, favoriteCount }) {
         <h1>Keep every watering rhythm, recovery note, and room check in one calm dashboard.</h1>
         <p className="hero-text">
           Plant Care Tracker is a client-side collection manager for houseplants. Add new plants,
-          mark watering sessions, favorite the ones you watch closely, and filter the shelf by room,
-          light, or care urgency.
+          mark watering sessions, favorite the ones you watch closely, compare rooms, and back up the
+          collection as JSON without leaving the browser.
         </p>
       </div>
 

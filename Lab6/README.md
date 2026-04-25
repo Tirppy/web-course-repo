@@ -2,6 +2,7 @@
 
 Verdant Logbook is a client-side only React app for managing a personal houseplant collection.
 It keeps plant data in the browser, helps surface which plants need care next, and offers a custom botanical theme with light and dark modes.
+The app also includes room-level insights, a 7-day care forecast, and JSON backup tools so the project goes beyond a basic CRUD list.
 
 ## Topic
 
@@ -20,7 +21,11 @@ It keeps plant data in the browser, helps surface which plants need care next, a
 - filter by room, light, care urgency, and favorite status
 - sort plants by urgency, newest, name, or room
 - view a dashboard with live collection statistics
+- compare rooms by plant count, favorites, thriving plants, and urgent care load
+- review a 7-day care forecast for upcoming watering sessions
 - view upcoming care items and recent activity history
+- export the collection to a JSON backup file
+- import a previously exported JSON backup
 - switch between custom light and dark themes
 - persist collection and theme in `localStorage`
 
@@ -52,7 +57,19 @@ It keeps plant data in the browser, helps surface which plants need care next, a
 2. Save changes to update the stored profile.
 3. Click `Remove` to delete a plant from the collection.
 
-### 5. Keep the experience personalized
+### 5. Review room-level care load
+
+1. Open the room overview panel.
+2. Compare which rooms have the highest number of plants that need action now.
+3. Use that summary to decide where to start a care round.
+
+### 6. Back up or restore the collection
+
+1. Click `Export collection` to download a JSON backup of the saved plants.
+2. Use `Import backup` to restore a previously exported file.
+3. The imported plants replace the current in-browser collection immediately.
+
+### 7. Keep the experience personalized
 
 1. Toggle between light and dark theme.
 2. Refresh the page.
@@ -62,6 +79,7 @@ It keeps plant data in the browser, helps surface which plants need care next, a
 
 - runtime state is managed with React hooks
 - persistent browser state is stored with `localStorage`
+- backup and restore happens entirely in the browser through downloaded JSON files
 - saved keys:
   - `plant-care-tracker:plants`
   - `plant-care-tracker:theme`
@@ -93,4 +111,4 @@ The repository contains a GitHub Actions workflow in `.github/workflows/static.y
 - builds the app with Vite
 - deploys `Lab6/dist` to GitHub Pages
 
-After pushing the branch or merging to `master`, the app can be published through GitHub Pages and submitted together with the repository URL.
+After pushing the branch or merging to `master`, the app can be published through GitHub Pages and submitted together with the repository URL and live URL required by the lab.
