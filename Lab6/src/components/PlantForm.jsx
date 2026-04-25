@@ -1,6 +1,6 @@
 import { HEALTH_OPTIONS, LIGHT_OPTIONS } from '../utils/plants'
 
-function PlantForm({ draft, isEditing, onChange, onSubmit, onCancel, onRestoreSamples }) {
+function PlantForm({ draft, isEditing, onChange, onSubmit, onCancel }) {
   return (
     <section className="panel panel-sticky">
       <div className="panel-heading compact">
@@ -95,9 +95,6 @@ function PlantForm({ draft, isEditing, onChange, onSubmit, onCancel, onRestoreSa
 
       <div className="aside-actions">
         <p>All data stays in this browser through localStorage, so the app remains client-side only.</p>
-        <button className="button button-ghost" type="button" onClick={onRestoreSamples}>
-          Restore sample collection
-        </button>
       </div>
     </section>
   )

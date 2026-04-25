@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import BackupPanel from './components/BackupPanel'
 import CareBoards from './components/CareBoards'
 import Dashboard from './components/Dashboard'
 import FilterBar from './components/FilterBar'
@@ -18,6 +19,7 @@ import {
   getWateringStatus,
   matchesSearch,
   normalizePlant,
+  parseImportedPlants,
   sortPlants,
 } from './utils/plants'
 import { loadLocalStorage, saveLocalStorage } from './utils/storage'
@@ -54,6 +56,7 @@ function App() {
   const [draft, setDraft] = useState(() => createEmptyDraft())
   const [editingId, setEditingId] = useState(null)
   const [filters, setFilters] = useState(defaultFilters)
+  const [backupNotice, setBackupNotice] = useState(null)
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
@@ -191,6 +194,10 @@ function App() {
     setEditingId(null)
   }
 
+  const handleResetFilters = () => {
+    setFilters({ ...defaultFilters })
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault()
 
@@ -281,8 +288,55 @@ function App() {
     }))
   }
 
-  const handleResetFilters = () => {
-    setFilters({ ...defaultFilters })
+  const handleExport = () => {
+    const payload = {
+      exportedAt: new Date().toISOString(),
+      version: 1,
+      plants,
+    }
+    const fileName = `verdant-logbook-backup-${referenceDate}.json`
+    const downloadUrl = URL.createObjectURL(
+      new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }),
+    )
+    const link = document.createElement('a')
+
+    link.href = downloadUrl
+    link.download = fileName
+    document.body.append(link)
+    link.click()
+    link.remove()
+
+    window.setTimeout(() => URL.revokeObjectURL(downloadUrl), 0)
+    setBackupNotice({
+      type: 'success',
+      message: `Exported ${plants.length} plants to ${fileName}.`,
+    })
+  }
+
+  const handleImport = async (event) => {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+
+    if (!file) {
+      return
+    }
+
+    try {
+      const importedPlants = parseImportedPlants(await file.text())
+
+      setPlants(importedPlants)
+      handleResetFilters()
+      resetDraft()
+      setBackupNotice({
+        type: 'success',
+        message: `Imported ${importedPlants.length} plants from ${file.name}.`,
+      })
+    } catch (error) {
+      setBackupNotice({
+        type: 'error',
+        message: error instanceof Error ? error.message : 'Could not import the selected backup.',
+      })
+    }
   }
 
   const handleRestoreSamples = () => {
@@ -290,6 +344,10 @@ function App() {
       setPlants(seedPlants)
       handleResetFilters()
       resetDraft()
+      setBackupNotice({
+        type: 'success',
+        message: `Restored ${seedPlants.length} sample plants for the demo collection.`,
+      })
     }
   }
 
@@ -363,6 +421,12 @@ function App() {
             onChange={handleDraftChange}
             onSubmit={handleSubmit}
             onCancel={resetDraft}
+          />
+
+          <BackupPanel
+            message={backupNotice}
+            onExport={handleExport}
+            onImport={handleImport}
             onRestoreSamples={handleRestoreSamples}
           />
 

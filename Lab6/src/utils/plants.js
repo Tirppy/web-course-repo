@@ -29,6 +29,8 @@ const HEALTH_LABELS = {
   watch: 'Needs attention',
 }
 
+const HEALTH_VALUES = new Set(HEALTH_OPTIONS.map((option) => option.value))
+
 const STATUS_PRIORITY = {
   overdue: 0,
   today: 1,
@@ -259,6 +261,32 @@ export function formatDisplayDate(value) {
   return dateFormatter.format(parseIsoDate(value))
 }
 
+export function parseImportedPlants(rawValue) {
+  let parsedValue
+
+  try {
+    parsedValue = JSON.parse(rawValue)
+  } catch {
+    throw new Error('Could not parse the selected JSON file.')
+  }
+
+  const plants = Array.isArray(parsedValue) ? parsedValue : parsedValue?.plants
+
+  if (!Array.isArray(plants)) {
+    throw new Error('Backup file must contain a plants array.')
+  }
+
+  const normalizedPlants = plants
+    .map((plant, index) => normalizeImportedPlant(plant, index))
+    .filter(Boolean)
+
+  if (!normalizedPlants.length) {
+    throw new Error('Backup file does not contain any valid plant entries.')
+  }
+
+  return sortPlants(normalizedPlants, 'newest')
+}
+
 export function getHealthLabel(health) {
   return HEALTH_LABELS[health] ?? 'Steady'
 }
@@ -290,6 +318,61 @@ function formatIsoDate(date) {
   const day = String(date.getDate()).padStart(2, '0')
 
   return `${year}-${month}-${day}`
+}
+
+function normalizeImportedPlant(plant, index) {
+  if (!plant || typeof plant !== 'object') {
+    return null
+  }
+
+  const name = normalizeText(plant.name)
+  const species = normalizeText(plant.species)
+  const room = normalizeText(plant.room)
+
+  if (!name || !species || !room) {
+    return null
+  }
+
+  const lastWatered = isIsoDateString(plant.lastWatered) ? plant.lastWatered : getTodayIso()
+  const createdAt = isIsoDateString(plant.createdAt) ? plant.createdAt : lastWatered
+  const interval = Number(plant.wateringInterval)
+  const wateringInterval = Number.isFinite(interval)
+    ? Math.min(30, Math.max(1, Math.round(interval)))
+    : DEFAULT_WATERING_INTERVAL
+  const history = Array.isArray(plant.history)
+    ? Array.from(new Set([...plant.history.filter(isIsoDateString), lastWatered])).sort((first, second) =>
+        first.localeCompare(second),
+      )
+    : [lastWatered]
+
+  return {
+    id: normalizeText(plant.id) || `imported-${index}-${Date.now()}`,
+    name,
+    species,
+    room,
+    light: LIGHT_OPTIONS.includes(plant.light) ? plant.light : LIGHT_OPTIONS[0],
+    wateringInterval,
+    lastWatered,
+    health: HEALTH_VALUES.has(plant.health) ? plant.health : 'steady',
+    favorite: Boolean(plant.favorite),
+    notes: normalizeText(plant.notes),
+    createdAt,
+    history,
+  }
+}
+
+function normalizeText(value) {
+  return typeof value === 'string' ? value.trim() : ''
+}
+
+function isIsoDateString(value) {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return false
+  }
+
+  const parsedDate = parseIsoDate(value)
+
+  return !Number.isNaN(parsedDate.getTime())
 }
 
 function createPlantId() {
