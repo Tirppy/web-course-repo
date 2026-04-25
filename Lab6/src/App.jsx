@@ -1,141 +1,358 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import CareBoards from './components/CareBoards'
+import Dashboard from './components/Dashboard'
+import FilterBar from './components/FilterBar'
+import Header from './components/Header'
+import PlantCard from './components/PlantCard'
+import PlantForm from './components/PlantForm'
+import { seedPlants } from './data/seedPlants'
+import {
+  buildActivity,
+  countRecentLogs,
+  createDraftFromPlant,
+  createEmptyDraft,
+  getTodayIso,
+  getWateringStatus,
+  matchesSearch,
+  normalizePlant,
+  sortPlants,
+} from './utils/plants'
+import { loadLocalStorage, saveLocalStorage } from './utils/storage'
 
-const samplePlants = [
-  {
-    name: 'Nova',
-    species: 'Monstera deliciosa',
-    room: 'Living room',
-    status: 'Needs water tomorrow',
-  },
-  {
-    name: 'Piper',
-    species: 'Pilea peperomioides',
-    room: 'Studio shelf',
-    status: 'Healthy and on track',
-  },
-  {
-    name: 'Sage',
-    species: 'Snake plant',
-    room: 'Bedroom',
-    status: 'Low maintenance this week',
-  },
-]
+const PLANT_STORAGE_KEY = 'plant-care-tracker:plants'
+const THEME_STORAGE_KEY = 'plant-care-tracker:theme'
 
-const highlightCards = [
-  {
-    eyebrow: 'Collection overview',
-    value: '12 plants',
-    detail: 'A calm dashboard for rooms, care rhythm, and favorites.',
-  },
-  {
-    eyebrow: 'Today focus',
-    value: '3 actions',
-    detail: 'Surface the plants that need watering or attention first.',
-  },
-  {
-    eyebrow: 'Saved locally',
-    value: 'Browser storage',
-    detail: 'Keep the app client-side only with runtime state and local persistence.',
-  },
-]
+const defaultFilters = {
+  query: '',
+  room: 'all',
+  light: 'all',
+  status: 'all',
+  favoritesOnly: false,
+  sortBy: 'attention',
+}
+
+function getInitialTheme() {
+  if (typeof window === 'undefined') {
+    return 'light'
+  }
+
+  const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY)
+
+  if (savedTheme === 'light' || savedTheme === 'dark') {
+    return savedTheme
+  }
+
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
 
 function App() {
-  const [theme, setTheme] = useState(() => {
-    const savedTheme = window.localStorage.getItem('plant-care-theme')
-
-    if (savedTheme) {
-      return savedTheme
-    }
-
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-  })
+  const [theme, setTheme] = useState(getInitialTheme)
+  const [plants, setPlants] = useState(() => loadLocalStorage(PLANT_STORAGE_KEY, seedPlants))
+  const [draft, setDraft] = useState(() => createEmptyDraft())
+  const [editingId, setEditingId] = useState(null)
+  const [filters, setFilters] = useState(defaultFilters)
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
-    window.localStorage.setItem('plant-care-theme', theme)
+    saveLocalStorage(THEME_STORAGE_KEY, theme)
   }, [theme])
+
+  useEffect(() => {
+    saveLocalStorage(PLANT_STORAGE_KEY, plants)
+  }, [plants])
+
+  const referenceDate = getTodayIso()
+
+  const roomOptions = useMemo(
+    () => Array.from(new Set(plants.map((plant) => plant.room))).sort((first, second) => first.localeCompare(second)),
+    [plants],
+  )
+
+  const dueNowCount = useMemo(
+    () =>
+      plants.filter((plant) => {
+        const status = getWateringStatus(plant, referenceDate)
+        return status.key === 'overdue' || status.key === 'today'
+      }).length,
+    [plants, referenceDate],
+  )
+
+  const thrivingCount = useMemo(
+    () => plants.filter((plant) => plant.health === 'thriving').length,
+    [plants],
+  )
+
+  const favoriteCount = useMemo(
+    () => plants.filter((plant) => plant.favorite).length,
+    [plants],
+  )
+
+  const stats = useMemo(
+    () => [
+      {
+        eyebrow: 'Collection size',
+        value: plants.length,
+        detail: 'Saved plant profiles available after refresh in this browser.',
+      },
+      {
+        eyebrow: 'Needs water',
+        value: dueNowCount,
+        detail: 'Plants that are overdue or scheduled for watering today.',
+      },
+      {
+        eyebrow: 'Thriving',
+        value: thrivingCount,
+        detail: 'Plants currently marked as healthy and stable.',
+      },
+      {
+        eyebrow: 'Recent logs',
+        value: countRecentLogs(plants, referenceDate),
+        detail: 'Watering events recorded during the last 7 days.',
+      },
+    ],
+    [dueNowCount, plants, referenceDate, thrivingCount],
+  )
+
+  const filteredPlants = useMemo(() => {
+    const query = filters.query.trim().toLowerCase()
+
+    return sortPlants(
+      plants.filter((plant) => {
+        const status = getWateringStatus(plant, referenceDate)
+
+        if (query && !matchesSearch(plant, query)) {
+          return false
+        }
+
+        if (filters.room !== 'all' && plant.room !== filters.room) {
+          return false
+        }
+
+        if (filters.light !== 'all' && plant.light !== filters.light) {
+          return false
+        }
+
+        if (filters.status !== 'all' && status.key !== filters.status) {
+          return false
+        }
+
+        if (filters.favoritesOnly && !plant.favorite) {
+          return false
+        }
+
+        return true
+      }),
+      filters.sortBy,
+      referenceDate,
+    )
+  }, [filters, plants, referenceDate])
+
+  const agendaPlants = useMemo(
+    () =>
+      sortPlants(
+        plants.filter((plant) => getWateringStatus(plant, referenceDate).dueInDays <= 3),
+        'attention',
+        referenceDate,
+      )
+        .slice(0, 5)
+        .map((plant) => ({
+          plant,
+          status: getWateringStatus(plant, referenceDate),
+        })),
+    [plants, referenceDate],
+  )
+
+  const recentActivity = useMemo(() => buildActivity(plants).slice(0, 6), [plants])
+
+  const handleDraftChange = (event) => {
+    const { name, value, type, checked } = event.target
+
+    setDraft((currentDraft) => ({
+      ...currentDraft,
+      [name]: type === 'checkbox' ? checked : value,
+    }))
+  }
+
+  const resetDraft = () => {
+    setDraft(createEmptyDraft())
+    setEditingId(null)
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+
+    const existingPlant = plants.find((plant) => plant.id === editingId)
+    const normalizedPlant = normalizePlant(draft, existingPlant)
+
+    if (existingPlant) {
+      const history = new Set(existingPlant.history ?? [])
+      history.add(normalizedPlant.lastWatered)
+
+      setPlants((currentPlants) =>
+        currentPlants.map((plant) =>
+          plant.id === editingId
+            ? {
+                ...normalizedPlant,
+                history: Array.from(history).sort((first, second) => first.localeCompare(second)),
+              }
+            : plant,
+        ),
+      )
+    } else {
+      setPlants((currentPlants) => [normalizedPlant, ...currentPlants])
+    }
+
+    resetDraft()
+  }
+
+  const handleEdit = (plant) => {
+    setDraft(createDraftFromPlant(plant))
+    setEditingId(plant.id)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleRemove = (id) => {
+    const plantToRemove = plants.find((plant) => plant.id === id)
+
+    if (!plantToRemove) {
+      return
+    }
+
+    if (window.confirm(`Remove ${plantToRemove.name} from the collection?`)) {
+      setPlants((currentPlants) => currentPlants.filter((plant) => plant.id !== id))
+
+      if (editingId === id) {
+        resetDraft()
+      }
+    }
+  }
+
+  const handleWater = (id) => {
+    const today = getTodayIso()
+
+    setPlants((currentPlants) =>
+      currentPlants.map((plant) => {
+        if (plant.id !== id) {
+          return plant
+        }
+
+        const history = new Set(plant.history ?? [])
+        history.add(today)
+
+        return {
+          ...plant,
+          lastWatered: today,
+          history: Array.from(history).sort((first, second) => first.localeCompare(second)),
+        }
+      }),
+    )
+  }
+
+  const handleFavorite = (id) => {
+    setPlants((currentPlants) =>
+      currentPlants.map((plant) =>
+        plant.id === id
+          ? {
+              ...plant,
+              favorite: !plant.favorite,
+            }
+          : plant,
+      ),
+    )
+  }
+
+  const handleFilterChange = (name, value) => {
+    setFilters((currentFilters) => ({
+      ...currentFilters,
+      [name]: value,
+    }))
+  }
+
+  const handleResetFilters = () => {
+    setFilters({ ...defaultFilters })
+  }
+
+  const handleRestoreSamples = () => {
+    if (window.confirm('Restore the starter collection? This replaces the saved plants in this browser.')) {
+      setPlants(seedPlants)
+      handleResetFilters()
+      resetDraft()
+    }
+  }
 
   return (
     <div className="app-shell">
       <div className="backdrop backdrop-left" aria-hidden="true" />
       <div className="backdrop backdrop-right" aria-hidden="true" />
 
-      <header className="hero">
-        <div className="hero-copy">
-          <p className="eyebrow">Plant Care Tracker</p>
-          <h1>Shape a calm care ritual for every plant in your home.</h1>
-          <p className="hero-text">
-            This first stage sets up the visual direction for the lab: a polished client-side
-            dashboard with theme switching, plant cards, and room-based organization.
-          </p>
+      <Header
+        theme={theme}
+        onToggle={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+        totalPlants={plants.length}
+        actionCount={dueNowCount}
+        favoriteCount={favoriteCount}
+      />
+
+      <main className="workspace">
+        <div className="workspace-main stack">
+          <Dashboard stats={stats} />
+
+          <FilterBar
+            filters={filters}
+            roomOptions={roomOptions}
+            visibleCount={filteredPlants.length}
+            totalCount={plants.length}
+            onChange={handleFilterChange}
+            onReset={handleResetFilters}
+          />
+
+          <section className="panel collection-panel">
+            <div className="panel-heading compact">
+              <div>
+                <p className="eyebrow">Plant collection</p>
+                <h2>Manage the whole shelf with actions, notes, and care status badges.</h2>
+              </div>
+              <span className="badge">{filteredPlants.length} visible</span>
+            </div>
+
+            {filteredPlants.length ? (
+              <div className="plant-grid plant-grid-live">
+                {filteredPlants.map((plant) => (
+                  <PlantCard
+                    key={plant.id}
+                    plant={plant}
+                    status={getWateringStatus(plant, referenceDate)}
+                    onWater={handleWater}
+                    onEdit={handleEdit}
+                    onRemove={handleRemove}
+                    onToggleFavorite={handleFavorite}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="empty-state">
+                <h3>No plants match the current filters.</h3>
+                <p>Reset the filters or restore the sample collection to see the dashboard fill up again.</p>
+                <button className="button button-secondary" type="button" onClick={handleResetFilters}>
+                  Clear filters
+                </button>
+              </div>
+            )}
+          </section>
         </div>
 
-        <button
-          className="theme-toggle"
-          type="button"
-          onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-          aria-label="Toggle color theme"
-        >
-          <span>Theme</span>
-          <strong>{theme === 'light' ? 'Dark' : 'Light'}</strong>
-        </button>
-      </header>
+        <aside className="workspace-aside stack">
+          <PlantForm
+            draft={draft}
+            isEditing={Boolean(editingId)}
+            onChange={handleDraftChange}
+            onSubmit={handleSubmit}
+            onCancel={resetDraft}
+            onRestoreSamples={handleRestoreSamples}
+          />
 
-      <main className="content-grid">
-        <section className="panel panel-large">
-          <div className="panel-heading">
-            <div>
-              <p className="eyebrow">Visual direction</p>
-              <h2>Warm paper textures, botanical accents, and quick insights.</h2>
-            </div>
-            <span className="badge">Scaffold ready</span>
-          </div>
-
-          <div className="stats-grid">
-            {highlightCards.map((card) => (
-              <article key={card.eyebrow} className="stat-card">
-                <p className="eyebrow">{card.eyebrow}</p>
-                <h3>{card.value}</h3>
-                <p>{card.detail}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="panel">
-          <div className="panel-heading compact">
-            <div>
-              <p className="eyebrow">Plant shelf</p>
-              <h2>Sample cards</h2>
-            </div>
-          </div>
-
-          <div className="plant-grid">
-            {samplePlants.map((plant) => (
-              <article key={plant.name} className="plant-card">
-                <p className="plant-room">{plant.room}</p>
-                <h3>{plant.name}</h3>
-                <p className="plant-species">{plant.species}</p>
-                <p className="plant-status">{plant.status}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="panel panel-accent">
-          <div className="panel-heading compact">
-            <div>
-              <p className="eyebrow">Planned next steps</p>
-              <h2>Features to add in the next commits</h2>
-            </div>
-          </div>
-
-          <ul className="feature-list">
-            <li>Add plant creation, editing, removal, and favorite actions.</li>
-            <li>Store the collection in localStorage and surface care status filters.</li>
-            <li>Document flows in README and prepare the app for GitHub Pages deployment.</li>
-          </ul>
-        </section>
+          <CareBoards agendaPlants={agendaPlants} recentActivity={recentActivity} />
+        </aside>
       </main>
     </div>
   )
