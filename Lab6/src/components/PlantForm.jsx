@@ -2,7 +2,7 @@ import { HEALTH_OPTIONS, LIGHT_OPTIONS } from '../utils/plants'
 
 function PlantForm({ draft, isEditing, onChange, onSubmit, onCancel }) {
   return (
-    <section className="panel panel-sticky">
+    <section className="panel">
       <div className="section-heading">
         <div>
           <h2>{isEditing ? 'Edit plant' : 'Add plant'}</h2>
