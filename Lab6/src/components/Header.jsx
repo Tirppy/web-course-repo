@@ -8,26 +8,21 @@ function Header({ theme, onToggle, totalPlants, actionCount, favoriteCount }) {
   ]
 
   return (
-    <header className="hero">
-      <div className="hero-copy">
-        <p className="eyebrow">Verdant Logbook</p>
-        <h1>Keep every watering rhythm, recovery note, and room check in one calm dashboard.</h1>
-        <p className="hero-text">
-          Plant Care Tracker is a client-side collection manager for houseplants. Add new plants,
-          mark watering sessions, favorite the ones you watch closely, compare rooms, and back up the
-          collection as JSON without leaving the browser.
-        </p>
+    <header className="topbar">
+      <div className="title-block">
+        <h1>Verdant Logbook</h1>
+        <p>Track watering schedules, room load, and notes in a local collection.</p>
       </div>
 
-      <div className="hero-actions">
-        <div className="hero-highlights">
+      <div className="topbar-side">
+        <dl className="topbar-stats">
           {quickStats.map((item) => (
-            <article key={item.label} className="hero-pill">
-              <span>{item.label}</span>
-              <strong>{item.value}</strong>
-            </article>
+            <div key={item.label}>
+              <dt>{item.label}</dt>
+              <dd>{item.value}</dd>
+            </div>
           ))}
-        </div>
+        </dl>
 
         <ThemeToggle theme={theme} onToggle={onToggle} />
       </div>

@@ -4,10 +4,10 @@ function CareBoards({ agendaPlants, recentActivity, weeklyForecast }) {
   return (
     <div className="care-grid">
       <section className="panel">
-        <div className="panel-heading compact">
+        <div className="section-heading">
           <div>
-            <p className="eyebrow">Next care queue</p>
-            <h2>Start with the plants that are closest to their next check.</h2>
+            <h2>Next care</h2>
+            <p>Plants that are closest to their next watering check.</p>
           </div>
         </div>
 
@@ -33,10 +33,10 @@ function CareBoards({ agendaPlants, recentActivity, weeklyForecast }) {
       </section>
 
       <section className="panel">
-        <div className="panel-heading compact">
+        <div className="section-heading">
           <div>
-            <p className="eyebrow">7-day forecast</p>
-            <h2>Scan how busy the next week looks before you start batching care.</h2>
+            <h2>7-day forecast</h2>
+            <p>See how many watering tasks are scheduled across the next week.</p>
           </div>
         </div>
 
@@ -58,10 +58,10 @@ function CareBoards({ agendaPlants, recentActivity, weeklyForecast }) {
       </section>
 
       <section className="panel">
-        <div className="panel-heading compact">
+        <div className="section-heading">
           <div>
-            <p className="eyebrow">Recent activity</p>
-            <h2>Review the latest watering history saved in this browser.</h2>
+            <h2>Recent activity</h2>
+            <p>Latest watering entries saved in this browser.</p>
           </div>
         </div>
 

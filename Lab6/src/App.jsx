@@ -101,24 +101,24 @@ function App() {
   const stats = useMemo(
     () => [
       {
-        eyebrow: 'Collection size',
+        label: 'Collection size',
         value: plants.length,
-        detail: 'Saved plant profiles available after refresh in this browser.',
+        detail: 'Plant profiles saved in this browser.',
       },
       {
-        eyebrow: 'Needs water',
+        label: 'Needs water',
         value: dueNowCount,
-        detail: 'Plants that are overdue or scheduled for watering today.',
+        detail: 'Plants that are overdue or due today.',
       },
       {
-        eyebrow: 'Thriving',
+        label: 'Thriving',
         value: thrivingCount,
-        detail: 'Plants currently marked as healthy and stable.',
+        detail: 'Plants currently marked as thriving.',
       },
       {
-        eyebrow: 'Recent logs',
+        label: 'Recent logs',
         value: countRecentLogs(plants, referenceDate),
-        detail: 'Watering events recorded during the last 7 days.',
+        detail: 'Watering entries recorded during the last 7 days.',
       },
     ],
     [dueNowCount, plants, referenceDate, thrivingCount],
@@ -353,9 +353,6 @@ function App() {
 
   return (
     <div className="app-shell">
-      <div className="backdrop backdrop-left" aria-hidden="true" />
-      <div className="backdrop backdrop-right" aria-hidden="true" />
-
       <Header
         theme={theme}
         onToggle={() => setTheme(theme === 'light' ? 'dark' : 'light')}
@@ -380,12 +377,12 @@ function App() {
           />
 
           <section className="panel collection-panel">
-            <div className="panel-heading compact">
+            <div className="section-heading">
               <div>
-                <p className="eyebrow">Plant collection</p>
-                <h2>Manage the whole shelf with actions, notes, and care status badges.</h2>
+                <h2>Plants</h2>
+                <p>Review, water, edit, and remove saved plants.</p>
               </div>
-              <span className="badge">{filteredPlants.length} visible</span>
+              <p className="section-count">{filteredPlants.length} shown</p>
             </div>
 
             {filteredPlants.length ? (
