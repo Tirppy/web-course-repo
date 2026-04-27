@@ -6,8 +6,7 @@ function ThemeToggle({ theme, onToggle }) {
       onClick={onToggle}
       aria-label={theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme'}
     >
-      <span>Theme</span>
-      <strong>{theme === 'light' ? 'Dark' : 'Light'}</strong>
+      {theme === 'light' ? 'Use dark theme' : 'Use light theme'}
     </button>
   )
 }

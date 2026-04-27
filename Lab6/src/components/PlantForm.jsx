@@ -3,12 +3,11 @@ import { HEALTH_OPTIONS, LIGHT_OPTIONS } from '../utils/plants'
 function PlantForm({ draft, isEditing, onChange, onSubmit, onCancel }) {
   return (
     <section className="panel panel-sticky">
-      <div className="panel-heading compact">
+      <div className="section-heading">
         <div>
-          <p className="eyebrow">Plant editor</p>
-          <h2>{isEditing ? 'Update a plant profile' : 'Add a new plant to the shelf'}</h2>
+          <h2>{isEditing ? 'Edit plant' : 'Add plant'}</h2>
+          <p>Save plant details, care interval, and notes to local storage.</p>
         </div>
-        <span className="badge">Stored locally</span>
       </div>
 
       <form className="plant-form" onSubmit={onSubmit}>
@@ -94,7 +93,7 @@ function PlantForm({ draft, isEditing, onChange, onSubmit, onCancel }) {
       </form>
 
       <div className="aside-actions">
-        <p>All data stays in this browser through localStorage, so the app remains client-side only.</p>
+        <p>All changes stay in this browser through localStorage.</p>
       </div>
     </section>
   )

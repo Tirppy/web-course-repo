@@ -1,12 +1,12 @@
 function RoomOverview({ rooms }) {
   return (
     <section className="panel">
-      <div className="panel-heading compact">
+      <div className="section-heading">
         <div>
-          <p className="eyebrow">Room overview</p>
-          <h2>Compare which rooms are calm, crowded, or ready for a care round.</h2>
+          <h2>Rooms</h2>
+          <p>Compare plant count, urgent care, favorites, and thriving plants by room.</p>
         </div>
-        <span className="badge">{rooms.length} rooms</span>
+        <p className="section-count">{rooms.length} rooms</p>
       </div>
 
       {rooms.length ? (

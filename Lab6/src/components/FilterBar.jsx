@@ -3,14 +3,14 @@ import { LIGHT_OPTIONS, SORT_OPTIONS, STATUS_FILTERS } from '../utils/plants'
 function FilterBar({ filters, roomOptions, visibleCount, totalCount, onChange, onReset }) {
   return (
     <section className="panel">
-      <div className="panel-heading compact">
+      <div className="section-heading">
         <div>
-          <p className="eyebrow">Search and filter</p>
-          <h2>Find the plants that need attention right now.</h2>
+          <h2>Filters</h2>
+          <p>Search the collection and narrow it by room, light, status, or favorites.</p>
         </div>
-        <span className="filter-summary">
+        <p className="filter-summary">
           Showing {visibleCount} of {totalCount}
-        </span>
+        </p>
       </div>
 
       <div className="filter-grid">
@@ -82,7 +82,6 @@ function FilterBar({ filters, roomOptions, visibleCount, totalCount, onChange, o
       </div>
 
       <div className="filter-actions">
-        <p>Filters work entirely in runtime state while the saved collection remains available after refresh.</p>
         <button className="button button-secondary" type="button" onClick={onReset}>
           Reset filters
         </button>

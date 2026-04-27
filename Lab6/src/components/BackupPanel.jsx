@@ -1,12 +1,11 @@
 function BackupPanel({ message, onExport, onImport, onRestoreSamples }) {
   return (
     <section className="panel">
-      <div className="panel-heading compact">
+      <div className="section-heading">
         <div>
-          <p className="eyebrow">Backup tools</p>
-          <h2>Export the collection to JSON or restore it later without leaving the browser.</h2>
+          <h2>Backup</h2>
+          <p>Export the collection to JSON or restore it later.</p>
         </div>
-        <span className="badge">JSON ready</span>
       </div>
 
       <div className="backup-actions">
@@ -20,12 +19,12 @@ function BackupPanel({ message, onExport, onImport, onRestoreSamples }) {
         </label>
       </div>
 
-      <p className="backup-copy">Use this when you want a portable backup before trying a new layout or device.</p>
+      <p className="backup-copy">Use a JSON file when you want a portable copy of the collection.</p>
 
       {message ? <p className={`notice notice-${message.type}`}>{message.message}</p> : null}
 
       <div className="aside-actions">
-        <p>Need a quick demo state again? Reload the curated starter collection at any moment.</p>
+        <p>Restore the sample collection when you want to reset the demo state.</p>
         <button className="button button-ghost" type="button" onClick={onRestoreSamples}>
           Restore sample collection
         </button>

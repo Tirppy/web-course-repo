@@ -1,20 +1,21 @@
 function Dashboard({ stats }) {
   return (
     <section className="panel">
-      <div className="panel-heading compact">
+      <div className="section-heading">
         <div>
-          <p className="eyebrow">Care snapshot</p>
-          <h2>See the collection status before you start tending.</h2>
+          <h2>Overview</h2>
+          <p>Current totals across the saved collection.</p>
         </div>
-        <span className="badge">Live runtime state</span>
       </div>
 
-      <div className="stats-grid">
+      <div className="stat-list">
         {stats.map((stat) => (
-          <article key={stat.eyebrow} className="stat-card">
-            <p className="eyebrow">{stat.eyebrow}</p>
+          <article key={stat.label} className="stat-row">
+            <div>
+              <p className="stat-label">{stat.label}</p>
+              <p className="stat-detail">{stat.detail}</p>
+            </div>
             <h3>{stat.value}</h3>
-            <p>{stat.detail}</p>
           </article>
         ))}
       </div>
