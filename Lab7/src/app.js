@@ -1,6 +1,8 @@
 import cors from 'cors'
 import express from 'express'
+import swaggerUi from 'swagger-ui-express'
 import { issueToken } from './auth.js'
+import { openApiSpec } from './openapi.js'
 import { createPlantRouter } from './plantRoutes.js'
 import { createPlantStore } from './plantStore.js'
 import { seedPlants } from './seedPlants.js'
@@ -11,6 +13,12 @@ export function createApp() {
 
   app.use(cors())
   app.use(express.json())
+
+  app.get('/openapi.json', (request, response) => {
+    response.status(200).json(openApiSpec)
+  })
+
+  app.use('/docs', swaggerUi.serve, swaggerUi.setup(openApiSpec))
 
   app.get('/health', (request, response) => {
     response.status(200).json({
