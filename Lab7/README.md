@@ -16,5 +16,14 @@ Default local server: `http://localhost:3007`
 ## Useful URLs
 
 - `GET /health` - health check
+- `POST /token` - issue a JWT with a 1-minute expiration
 - `GET /docs` - Swagger UI API documentation
 - `GET /` - small API-backed plant client
+
+Example token request:
+
+```bash
+curl -X POST http://localhost:3007/token \
+  -H "Content-Type: application/json" \
+  -d '{"role":"ADMIN"}'
+```
