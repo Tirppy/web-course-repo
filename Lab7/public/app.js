@@ -63,7 +63,6 @@ async function loadToken(role) {
 
   token = data.token
   tokenStatus.textContent = `${data.role} token loaded: ${data.permissions.join(', ')}. Expires in ${data.expiresIn} seconds.`
-  showMessage(`${data.role} token loaded from /token.`)
   await loadPlants()
 }
 
@@ -163,8 +162,6 @@ function renderPlants(plants, pagination) {
     card.querySelector('[data-action="delete"]').addEventListener('click', () => deletePlant(plant.id))
     plantGrid.append(card)
   })
-
-  showMessage(`Showing ${pagination.returned} of ${pagination.total} plants. skip=${pagination.skip}, limit=${pagination.limit}`)
 }
 
 function showMessage(text, isError = false) {
