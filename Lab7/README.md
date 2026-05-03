@@ -24,6 +24,7 @@ Default local server: `http://localhost:3007`
 - `PATCH /api/plants/:id/favorite` - toggle favorite, requires `WRITE`
 - `DELETE /api/plants/:id` - remove a plant, requires `DELETE`
 - `GET /docs` - Swagger UI API documentation
+- `GET /openapi.json` - raw OpenAPI specification
 - `GET /` - small API-backed plant client
 
 Example token request:
