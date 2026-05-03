@@ -1,5 +1,7 @@
 import cors from 'cors'
 import express from 'express'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import swaggerUi from 'swagger-ui-express'
 import { issueToken } from './auth.js'
 import { openApiSpec } from './openapi.js'
@@ -10,9 +12,11 @@ import { seedPlants } from './seedPlants.js'
 export function createApp() {
   const app = express()
   const plantStore = createPlantStore(seedPlants)
+  const publicDirectory = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'public')
 
   app.use(cors())
   app.use(express.json())
+  app.use(express.static(publicDirectory))
 
   app.get('/openapi.json', (request, response) => {
     response.status(200).json(openApiSpec)

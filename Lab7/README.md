@@ -25,7 +25,7 @@ Default local server: `http://localhost:3007`
 - `DELETE /api/plants/:id` - remove a plant, requires `DELETE`
 - `GET /docs` - Swagger UI API documentation
 - `GET /openapi.json` - raw OpenAPI specification
-- `GET /` - small API-backed plant client
+- `GET /` - small API-backed plant client using `/token` and `/api/plants`
 
 Example token request:
 
