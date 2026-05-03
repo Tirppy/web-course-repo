@@ -13,6 +13,12 @@ npm run dev
 
 Default local server: `http://localhost:3007`
 
+Run the API checks:
+
+```bash
+npm test
+```
+
 ## Useful URLs
 
 - `GET /health` - health check
