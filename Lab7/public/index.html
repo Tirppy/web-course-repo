@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="API-backed plant care client for Lab 7." />
+    <title>Lab 7 Plant API Client</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Lab 7 API integration</p>
+          <h1>Plant care dashboard powered by JWT-protected REST endpoints.</h1>
+          <p>
+            This client uses the same plant concept from Lab 6, requests a JWT from the backend,
+            and calls protected CRUD endpoints with that token.
+          </p>
+        </div>
+        <a class="docs-link" href="/docs">Open Swagger docs</a>
+      </section>
+
+      <section class="panel auth-panel">
+        <div>
+          <p class="eyebrow">Token</p>
+          <h2>Choose a demo role</h2>
+          <p id="tokenStatus">No token loaded yet.</p>
+        </div>
+        <div class="role-actions">
+          <button type="button" data-role="VISITOR">Visitor</button>
+          <button type="button" data-role="WRITER">Writer</button>
+          <button type="button" data-role="ADMIN">Admin</button>
+        </div>
+      </section>
+
+      <section class="panel controls-panel">
+        <form id="plantForm" class="plant-form">
+          <label>
+            Plant name
+            <input name="name" required placeholder="Nova" />
+          </label>
+          <label>
+            Species
+            <input name="species" required placeholder="Monstera deliciosa" />
+          </label>
+          <label>
+            Room
+            <input name="room" required placeholder="Living room" />
+          </label>
+          <label>
+            Water every
+            <input name="wateringInterval" type="number" min="1" max="60" value="7" required />
+          </label>
+          <label>
+            Light
+            <select name="light">
+              <option>Bright indirect</option>
+              <option>Filtered sun</option>
+              <option>Partial shade</option>
+              <option>Low light</option>
+            </select>
+          </label>
+          <label>
+            Health
+            <select name="health">
+              <option value="thriving">Thriving</option>
+              <option value="steady">Steady</option>
+              <option value="watch">Needs attention</option>
+            </select>
+          </label>
+          <label class="span-2">
+            Notes
+            <textarea name="notes" placeholder="Care notes"></textarea>
+          </label>
+          <button class="primary span-2" type="submit">Create plant through API</button>
+        </form>
+
+        <div class="filters">
+          <label>
+            Search
+            <input id="searchInput" type="search" placeholder="Name, species, room, notes" />
+          </label>
+          <label>
+            Limit
+            <select id="limitInput">
+              <option>3</option>
+              <option selected>6</option>
+              <option>12</option>
+            </select>
+          </label>
+          <button type="button" id="previousPage">Previous</button>
+          <button type="button" id="nextPage">Next</button>
+        </div>
+      </section>
+
+      <p id="message" class="message" hidden></p>
+      <section id="plantGrid" class="plant-grid" aria-live="polite"></section>
+    </main>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
