@@ -116,6 +116,25 @@ export const openApiSpec = {
           },
         },
       },
+      PlantArrayResponse: {
+        type: 'object',
+        properties: {
+          data: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/Plant' },
+          },
+        },
+      },
+      PlantReplaceRequest: {
+        type: 'object',
+        required: ['plants'],
+        properties: {
+          plants: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/Plant' },
+          },
+        },
+      },
       Error: {
         type: 'object',
         properties: {
@@ -227,6 +246,32 @@ export const openApiSpec = {
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/PlantResponse' },
+              },
+            },
+          },
+          400: { description: 'Validation error' },
+          401: { $ref: '#/components/responses/Unauthorized' },
+          403: { $ref: '#/components/responses/Forbidden' },
+        },
+      },
+      put: {
+        tags: ['Plants'],
+        summary: 'Replace the plant collection from a backup',
+        security: [{ bearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/PlantReplaceRequest' },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: 'Plant collection replaced',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/PlantArrayResponse' },
               },
             },
           },

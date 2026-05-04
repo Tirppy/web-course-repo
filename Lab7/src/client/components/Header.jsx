@@ -11,7 +11,7 @@ function Header({ theme, onToggle, totalPlants, actionCount, favoriteCount }) {
     <header className="topbar">
       <div className="title-block">
         <h1>Verdant Logbook</h1>
-        <p>Track watering schedules, room load, and notes in a local collection.</p>
+        <p>Track watering schedules, room load, and notes through the Lab 7 API.</p>
       </div>
 
       <div className="topbar-side">

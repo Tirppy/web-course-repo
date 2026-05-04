@@ -1,4 +1,15 @@
 import { useEffect, useMemo, useState } from 'react'
+import {
+  createPlant,
+  deletePlant,
+  listPlants,
+  replacePlants,
+  requestToken,
+  toggleFavorite,
+  updatePlant,
+  waterPlant,
+} from './api'
+import AuthPanel from './components/AuthPanel'
 import BackupPanel from './components/BackupPanel'
 import CareBoards from './components/CareBoards'
 import Dashboard from './components/Dashboard'
@@ -22,9 +33,8 @@ import {
   parseImportedPlants,
   sortPlants,
 } from './utils/plants'
-import { loadLocalStorage, saveLocalStorage } from './utils/storage'
+import { saveLocalStorage } from './utils/storage'
 
-const PLANT_STORAGE_KEY = 'plant-care-tracker:plants'
 const THEME_STORAGE_KEY = 'plant-care-tracker:theme'
 
 const defaultFilters = {
@@ -52,11 +62,14 @@ function getInitialTheme() {
 
 function App() {
   const [theme, setTheme] = useState(getInitialTheme)
-  const [plants, setPlants] = useState(() => loadLocalStorage(PLANT_STORAGE_KEY, seedPlants))
+  const [plants, setPlants] = useState([])
   const [draft, setDraft] = useState(() => createEmptyDraft())
   const [editingId, setEditingId] = useState(null)
   const [filters, setFilters] = useState(defaultFilters)
   const [backupNotice, setBackupNotice] = useState(null)
+  const [token, setToken] = useState('')
+  const [tokenInfo, setTokenInfo] = useState({ role: '', permissions: [], expiresIn: 0 })
+  const [apiStatus, setApiStatus] = useState('Request an API role to load plants.')
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme
@@ -64,8 +77,8 @@ function App() {
   }, [theme])
 
   useEffect(() => {
-    saveLocalStorage(PLANT_STORAGE_KEY, plants)
-  }, [plants])
+    void handleSelectRole('ADMIN')
+  }, [])
 
   const referenceDate = getTodayIso()
 
@@ -103,7 +116,7 @@ function App() {
       {
         label: 'Collection size',
         value: plants.length,
-        detail: 'Plant profiles saved in this browser.',
+        detail: 'Plant profiles loaded from the protected API.',
       },
       {
         label: 'Needs water',
@@ -198,31 +211,64 @@ function App() {
     setFilters({ ...defaultFilters })
   }
 
-  const handleSubmit = (event) => {
+  const handleSelectRole = async (role) => {
+    try {
+      setApiStatus(`Requesting ${role} token...`)
+      const payload = await requestToken(role)
+
+      setToken(payload.token)
+      setTokenInfo({
+        role: payload.role,
+        permissions: payload.permissions,
+        expiresIn: payload.expiresIn,
+      })
+      setApiStatus(`${payload.role} token loaded. API calls use this role until it expires.`)
+      await loadApiPlants(payload.token)
+    } catch (error) {
+      setApiStatus(error instanceof Error ? error.message : 'Could not request an API token.')
+    }
+  }
+
+  const loadApiPlants = async (activeToken = token) => {
+    if (!activeToken) {
+      return
+    }
+
+    try {
+      const payload = await listPlants(activeToken, { limit: 100 })
+      setPlants(payload.data)
+    } catch (error) {
+      setApiStatus(error instanceof Error ? error.message : 'Could not load API plants.')
+    }
+  }
+
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
     const existingPlant = plants.find((plant) => plant.id === editingId)
     const normalizedPlant = normalizePlant(draft, existingPlant)
 
-    if (existingPlant) {
-      const history = new Set(existingPlant.history ?? [])
-      history.add(normalizedPlant.lastWatered)
+    try {
+      if (existingPlant) {
+        const history = new Set(existingPlant.history ?? [])
+        history.add(normalizedPlant.lastWatered)
 
-      setPlants((currentPlants) =>
-        currentPlants.map((plant) =>
-          plant.id === editingId
-            ? {
-                ...normalizedPlant,
-                history: Array.from(history).sort((first, second) => first.localeCompare(second)),
-              }
-            : plant,
-        ),
-      )
-    } else {
-      setPlants((currentPlants) => [normalizedPlant, ...currentPlants])
+        await updatePlant(token, editingId, {
+          ...normalizedPlant,
+          history: Array.from(history).sort((first, second) => first.localeCompare(second)),
+        })
+      } else {
+        await createPlant(token, normalizedPlant)
+      }
+
+      resetDraft()
+      await loadApiPlants()
+    } catch (error) {
+      setBackupNotice({
+        type: 'error',
+        message: error instanceof Error ? error.message : 'Could not save the plant through the API.',
+      })
     }
-
-    resetDraft()
   }
 
   const handleEdit = (plant) => {
@@ -231,54 +277,53 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const handleRemove = (id) => {
+  const handleRemove = async (id) => {
     const plantToRemove = plants.find((plant) => plant.id === id)
 
     if (!plantToRemove) {
       return
     }
 
-    if (window.confirm(`Remove ${plantToRemove.name} from the collection?`)) {
-      setPlants((currentPlants) => currentPlants.filter((plant) => plant.id !== id))
+    if (!window.confirm(`Remove ${plantToRemove.name} from the collection?`)) {
+      return
+    }
 
+    try {
+      await deletePlant(token, id)
+      await loadApiPlants()
       if (editingId === id) {
         resetDraft()
       }
+    } catch (error) {
+      setBackupNotice({
+        type: 'error',
+        message: error instanceof Error ? error.message : 'Could not remove the plant through the API.',
+      })
     }
   }
 
-  const handleWater = (id) => {
-    const today = getTodayIso()
-
-    setPlants((currentPlants) =>
-      currentPlants.map((plant) => {
-        if (plant.id !== id) {
-          return plant
-        }
-
-        const history = new Set(plant.history ?? [])
-        history.add(today)
-
-        return {
-          ...plant,
-          lastWatered: today,
-          history: Array.from(history).sort((first, second) => first.localeCompare(second)),
-        }
-      }),
-    )
+  const handleWater = async (id) => {
+    try {
+      await waterPlant(token, id)
+      await loadApiPlants()
+    } catch (error) {
+      setBackupNotice({
+        type: 'error',
+        message: error instanceof Error ? error.message : 'Could not log watering through the API.',
+      })
+    }
   }
 
-  const handleFavorite = (id) => {
-    setPlants((currentPlants) =>
-      currentPlants.map((plant) =>
-        plant.id === id
-          ? {
-              ...plant,
-              favorite: !plant.favorite,
-            }
-          : plant,
-      ),
-    )
+  const handleFavorite = async (id) => {
+    try {
+      await toggleFavorite(token, id)
+      await loadApiPlants()
+    } catch (error) {
+      setBackupNotice({
+        type: 'error',
+        message: error instanceof Error ? error.message : 'Could not update favorite status through the API.',
+      })
+    }
   }
 
   const handleFilterChange = (name, value) => {
@@ -324,7 +369,8 @@ function App() {
     try {
       const importedPlants = parseImportedPlants(await file.text())
 
-      setPlants(importedPlants)
+      await replacePlants(token, importedPlants)
+      await loadApiPlants()
       handleResetFilters()
       resetDraft()
       setBackupNotice({
@@ -339,15 +385,23 @@ function App() {
     }
   }
 
-  const handleRestoreSamples = () => {
-    if (window.confirm('Restore the starter collection? This replaces the saved plants in this browser.')) {
-      setPlants(seedPlants)
-      handleResetFilters()
-      resetDraft()
-      setBackupNotice({
-        type: 'success',
-        message: `Restored ${seedPlants.length} sample plants for the demo collection.`,
-      })
+  const handleRestoreSamples = async () => {
+    if (window.confirm('Restore the starter collection? This replaces the API plant collection.')) {
+      try {
+        await replacePlants(token, seedPlants)
+        await loadApiPlants()
+        handleResetFilters()
+        resetDraft()
+        setBackupNotice({
+          type: 'success',
+          message: `Restored ${seedPlants.length} sample plants through the API.`,
+        })
+      } catch (error) {
+        setBackupNotice({
+          type: 'error',
+          message: error instanceof Error ? error.message : 'Could not restore sample plants through the API.',
+        })
+      }
     }
   }
 
@@ -412,6 +466,14 @@ function App() {
         </div>
 
         <aside className="workspace-aside stack">
+          <AuthPanel
+            activeRole={tokenInfo.role}
+            permissions={tokenInfo.permissions}
+            expiresIn={tokenInfo.expiresIn}
+            status={apiStatus}
+            onSelectRole={handleSelectRole}
+          />
+
           <PlantForm
             draft={draft}
             isEditing={Boolean(editingId)}
