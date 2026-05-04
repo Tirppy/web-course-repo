@@ -1,5 +1,6 @@
 import cors from 'cors'
 import express from 'express'
+import { existsSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import swaggerUi from 'swagger-ui-express'
@@ -12,11 +13,16 @@ import { seedPlants } from './seedPlants.js'
 export function createApp() {
   const app = express()
   const plantStore = createPlantStore(seedPlants)
-  const publicDirectory = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'public')
+  const clientDirectory = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'dist')
+  const clientIndex = path.join(clientDirectory, 'index.html')
+  const hasBuiltClient = existsSync(clientIndex)
 
   app.use(cors())
   app.use(express.json())
-  app.use(express.static(publicDirectory))
+
+  if (hasBuiltClient) {
+    app.use(express.static(clientDirectory))
+  }
 
   app.get('/openapi.json', (request, response) => {
     response.status(200).json(openApiSpec)
@@ -40,6 +46,16 @@ export function createApp() {
   })
 
   app.use('/api/plants', createPlantRouter(plantStore))
+
+  if (hasBuiltClient) {
+    app.get('*', (request, response, next) => {
+      if (request.path.startsWith('/api') || request.path === '/openapi.json') {
+        return next()
+      }
+
+      return response.sendFile(clientIndex)
+    })
+  }
 
   app.use((request, response) => {
     response.status(404).json({ error: 'Route not found' })

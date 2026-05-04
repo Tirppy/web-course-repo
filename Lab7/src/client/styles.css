@@ -423,6 +423,35 @@ textarea {
   gap: 1rem;
 }
 
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.token-details {
+  display: grid;
+  gap: 0.7rem;
+  margin: 1rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.token-details div {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.token-details dt {
+  color: var(--muted);
+}
+
+.token-details dd {
+  margin: 0;
+  font-weight: 700;
+}
+
 .filter-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -746,7 +775,9 @@ textarea {
 
   .topbar-stats,
   .filter-grid,
-  .room-grid {
+  .room-grid,
+  .role-grid,
+  .token-details div {
     grid-template-columns: 1fr;
   }
 
