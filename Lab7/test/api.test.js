@@ -78,6 +78,42 @@ test('admin token can create, read, update, water, favorite, and delete plants',
   await request(app).get(`/api/plants/${id}`).set(authHeader).expect(404)
 })
 
+test('writer token can replace the collection from a client backup', async () => {
+  const app = createApp()
+  const token = await tokenFor(app, 'WRITER')
+  const authHeader = { Authorization: `Bearer ${token}` }
+  const replacementPlants = [
+    {
+      id: 'restored-plant',
+      name: 'Restored Plant',
+      species: 'Ficus elastica',
+      room: 'Hallway',
+      light: 'Filtered sun',
+      wateringInterval: 9,
+      lastWatered: '2026-05-01',
+      health: 'thriving',
+      favorite: true,
+      notes: 'Restored from an exported client backup.',
+      createdAt: '2026-04-12',
+      history: ['2026-04-22', '2026-05-01'],
+    },
+  ]
+
+  const replaceResponse = await request(app)
+    .put('/api/plants')
+    .set(authHeader)
+    .send({ plants: replacementPlants })
+    .expect(200)
+
+  assert.equal(replaceResponse.body.data.length, 1)
+  assert.equal(replaceResponse.body.data[0].id, 'restored-plant')
+
+  const listResponse = await request(app).get('/api/plants').set(authHeader).expect(200)
+
+  assert.equal(listResponse.body.pagination.total, 1)
+  assert.equal(listResponse.body.data[0].name, 'Restored Plant')
+})
+
 test('invalid plant payload returns a validation status code', async () => {
   const app = createApp()
   const token = await tokenFor(app, 'WRITER')

@@ -27,6 +27,15 @@ export function createPlantRouter(plantStore) {
     }
   })
 
+  router.put('/', requirePermission('WRITE'), (request, response, next) => {
+    try {
+      const plants = plantStore.replaceAll(request.body?.plants)
+      response.status(200).json({ data: plants })
+    } catch (error) {
+      next(error)
+    }
+  })
+
   router.put('/:id', requirePermission('WRITE'), (request, response, next) => {
     try {
       const plant = plantStore.update(request.params.id, request.body)

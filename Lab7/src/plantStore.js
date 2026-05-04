@@ -38,6 +38,19 @@ export function createPlantStore(seedPlants = []) {
       }
     },
 
+    replaceAll(inputPlants = []) {
+      if (!Array.isArray(inputPlants)) {
+        throw createValidationError('plants must be an array')
+      }
+
+      const nextPlants = inputPlants.map((plant) => normalizeStoredPlant(plant))
+
+      plants.clear()
+      nextPlants.forEach((plant) => plants.set(plant.id, plant))
+
+      return Array.from(plants.values()).sort((first, second) => first.name.localeCompare(second.name))
+    },
+
     get(id) {
       return plants.get(id) ?? null
     },
@@ -104,6 +117,18 @@ export function createPlantStore(seedPlants = []) {
     remove(id) {
       return plants.delete(id)
     },
+  }
+}
+
+function normalizeStoredPlant(input = {}) {
+  const plant = normalizePlantInput(input)
+  const id = normalizeText(input.id) || plant.id
+
+  return {
+    ...plant,
+    id,
+    favorite: Boolean(input.favorite),
+    createdAt: isIsoDateString(input.createdAt) ? input.createdAt : plant.createdAt,
   }
 }
 
